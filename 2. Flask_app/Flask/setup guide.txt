@@ -1,0 +1,313 @@
+CMD Python Virtual Environment
+============================================================================
+flask run --help
+============================================================================
+py -m venv venv
+venv\Scripts\activate   (just CMD)
+venv\Scripts\python
+============================================================================
+venv\Scripts\activate
+set FLASK_APP=hello.py
+set FLASK_DEBUG=1	( app.run(debug=True) )
+flask run
+============================================================================
+pip install flask-bootstrap
+pip install flask-moment   (time and date in JS)
+pip install flask-wtf   (form)
+pip install flask-sqlalchemy   (sql)
+pip install flask-migrate   (sql migrate)
+	flask db init
+	flask db migrate   (flask db migrate -m "initial migration") (remember to review the generated migration script and correct it if it has any inaccuracies)
+	flask db upgrade   (after upgrade, new named columns are created besides old columns -> MUST sync data from old columns to new columns of only NONEs)
+			   (OR delete your data.sqlite database file and then run flask db upgrade to generate a new database through the migration framework)
+			   (OR skip the flask db upgrade and instead mark the existing database as upgraded using the flask db stamp)
+	flask db downgrade (remove the last migration from the database)
+pip install flask-mailing  (OR https://www.waynerv.com/flask-mailman/) (Django style)
+pip install flask-login
+
+pip install faker   (Creating Fake Blog Post Data)
+pip install flask-pagedown markdown bleach
+pip install httpie
+	http --json --auth namcaocomebackp66@gmail.com:12345 GET http://127.0.0.1:5000/api/v1/posts
+	http --auth namcaocomebackp66@gmail.com:12345 --json POST http://127.0.0.1:5000/api/v1/posts/ "body=I'm adding a post from the *command line*."
+pip install coverage
+pip install selenium
+	pip install chromedriver
+
+pip install waitress
+	waitress-serve --port 8000 flaske:app
+	web: waitress-serve --port=$PORT flaske:app
+pip install gunicorn (not work on Microsoft Windows)
+	gunicorn flaske:app
+	web: gunicorn flaske:app
+============================================================================ <Issues: update field names, work with instances (delete command) after restarting>
+****** Create tables with instances
+flask shell
+from hello import db ***
+db.create_all()
+
+from hello import Role, User ***
+>>> admin_role = Role(name='Admin')
+>>> mod_role = Role(name='Moderator')
+>>> user_role = Role(name='User')
+>>> caotungnam = User(username='Nam Cao', role=admin_role)
+>>> nguyenthique = User(username='Que Nguyen', role=mod_role)
+>>> daydreamer12 = User(username='Ryan Bui', role=user_role)
+>>> db.session.add_all([admin_role, mod_role, user_role, caotungnam, nguyenthique, daydreamer12])
+>>> db.session.commit()
+
+****** Edit attributes
+>>> admin_role.name = 'Administrator'
+>>> db.session.add(admin_role)
+>>> db.session.commit()
+>>> daydreamer12.role = admin_role
+>>> db.session.add(daydreamer12)
+>>> db.session.commit()
+>>> db.session.delete(mod_role)
+>>> db.session.commit()
+
+****** Querying rows (To get field values from created objects)
+>>> User.query.all()
+>>> User.query.filter_by(role_id='Moderator').all()
+>>> User.query.filter_by(role_id=2).all()
+	str(User.query.filter_by(role_id='Moderator'))
+filter() filter_by() limit() offset() order_by() group_by()
+all() first() first_or_404() get() get_or_404() count() paginate()
+>>> user_role = Role.query.filter_by(name='User').first()
+>>> users = user_role.users
+>>> users
+	user_role.users.order_by(User.username).all()   (users = db.relationship('User', backref='role', lazy='dynamic'))
+	user_role.users.count()
+
+>>> db.drop_all()
+>>> db.create_all()
+========================================================================================================================================================
+|-flasky
+  |-app/
+    |-templates/
+    |-static/
+    |-main/
+      |-__init__.py
+      |-errors.py
+      |-forms.py
+      |-views.py
+    |-__init__.py
+    |-email.py
+    |-models.py
+  |-migrations/
+  |-tests/
+    |-__init__.py
+    |-test*.py
+  |-venv/
+  |-requirements.txt
+  |-config.py
+  |-flasky.py
+============================================================================
+CONFIG.PY
+*********
+import os
+basedir = os.path.abspath(os.path.dirname(__file__))
+
+class Config:
+    SECRET_KEY = os.environ.get('SECRET_KEY') or 'hard to guess string'
+    MAIL_SERVER = os.environ.get('MAIL_SERVER', 'smtp.googlemail.com')
+    MAIL_PORT = int(os.environ.get('MAIL_PORT', '587'))
+    MAIL_TLS = os.environ.get('MAIL_TLS', 'true').lower() in \
+        ['true', 'on', '1']
+    MAIL_USERNAME = os.environ.get('MAIL_USERNAME')
+    MAIL_PASSWORD = os.environ.get('MAIL_PASSWORD')
+    FLASKY_MAIL_SUBJECT_PREFIX = '[Flasky]'
+    FLASKY_ADMIN = os.environ.get('FLASKY_ADMIN')
+    SQLALCHEMY_TRACK_MODIFICATIONS = False
+
+    @staticmethod
+    def init_app(app):
+        pass
+
+class DevelopmentConfig(Config):
+    DEBUG = True
+    SQLALCHEMY_DATABASE_URI = os.environ.get('DEV_DATABASE_URL') or \
+        'sqlite:///' + os.path.join(basedir, 'data-dev.sqlite')
+
+class TestingConfig(Config):
+    TESTING = True
+    SQLALCHEMY_DATABASE_URI = os.environ.get('TEST_DATABASE_URL') or \
+        'sqlite://'
+
+class ProductionConfig(Config):
+    SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL') or \
+        'sqlite:///' + os.path.join(basedir, 'data.sqlite')
+
+config = {
+    'development': DevelopmentConfig,
+    'testing': TestingConfig,
+    'production': ProductionConfig,
+
+    'default': DevelopmentConfig
+}
+
+************************************************
+app/__init__.py: application package constructor
+************************************************
+from flask import Flask, render_template
+from flask_bootstrap import Bootstrap
+from flask_mailing import Mail
+from flask_moment import Moment
+from flask_sqlalchemy import SQLAlchemy
+from config import config
+
+bootstrap = Bootstrap()
+mail = Mail()
+moment = Moment()
+db = SQLAlchemy()
+
+def create_app(config_name):
+    app = Flask(__name__)
+    app.config.from_object(config[config_name])   ###
+    config[config_name].init_app(app)   ###
+
+    bootstrap.init_app(app)
+    mail.init_app(app)
+    moment.init_app(app)
+    db.init_app(app)
+
+    # attach routes and custom error pages here
+
+    return app
+
+************************************************
+app/main/__init__.py: main blueprint creation
+************************************************
+from flask import Blueprint
+
+main = Blueprint('main', __name__)   ### the name of the blueprint = the first argument to the Blueprint constructor = 'main' / and the module or package where the blueprint is located '__name__'
+
+from . import views, errors
+
+************************************************
+app/__init__.py: main blueprint registration
+************************************************
+def create_app(config_name):
+    # ...
+
+    from .main import main as main_blueprint
+    app.register_blueprint(main_blueprint)
+
+    return app
+
+************************************************
+app/main/errors.py: error handlers in main blueprint
+************************************************
+from flask import render_template
+from . import main
+
+@main.app_errorhandler(404)   ###
+def page_not_found(e):
+    return render_template('404.html'), 404
+
+@main.app_errorhandler(500)
+def internal_server_error(e):
+    return render_template('500.html'), 500
+
+************************************************
+app/main/views.py: application routes in main blueprint
+************************************************
+from datetime import datetime
+from flask import render_template, session, redirect, url_for
+from . import main
+from .forms import NameForm
+from .. import db
+from ..models import User
+
+@main.route('/', methods=['GET', 'POST'])   ###
+def index():
+    form = NameForm()
+    if form.validate_on_submit():
+        # ...
+        return redirect(url_for('.index'))   ###
+    return render_template('index.html',
+                           form=form, name=session.get('name'),
+                           known=session.get('known', False),
+                           current_time=datetime.utcnow())
+
+
+*********
+FLASKY.PY
+*********
+import os
+from app import create_app, db
+from app.models import User, Role
+from flask_migrate import Migrate
+
+app = create_app(os.getenv('FLASK_CONFIG') or 'default')
+migrate = Migrate(app, db)
+
+@app.shell_context_processor
+def make_shell_context():
+    return dict(db=db, User=User, Role=Role)
+
+============================================================================
+pip freeze >requirements.txt
+pip install -r requirements.txt
+
+set FLASK_APP and FLASK_DEBUG environment variables by defaults (no need to retype again and gain)
+	~/.bashrc file
+
+========================================================================================================================================================
+========================================================================================================================================================
+Step 1: Create an account with Heroku
+Step 2: Installing the Heroku CLI
+	heroku login command: heroku login
+Step 3: Creating an application
+	heroku create <appname>   =>   https://<appname>.herokuapp.com
+	git remote show heroku   =>   https://git.heroku.com/<appname>.git
+Step 4: heroku config:set FLASK_APP=flaske.py
+Step 5: heroku addons:create heroku-postgresql:hobby-dev
+Step 6: heroku config:set FLASK_CONFIG=heroku
+Step 7: $ heroku config:set SECRET_KEY=d68653675379485599f7876a3b469a57
+	$ heroku config:set MAIL_USERNAME=<your-gmail-username>
+	$ heroku config:set MAIL_PASSWORD=<your-gmail-password>
+Step 8: psycopg2 package that enables SQLAlchemy to access the Postgres database
+	-r requirements/heroku.txt
+Step 9: pip install flask-sslify
+	To intercept any requests sent to the http:// interface and redirect them to https://
+Step 10: heroku local:run flask deploy
+	heroku local
+	heroku local web=3    (starts three web workers, each listening on a different port:)
+Step 11: git push heroku master   (to upload the application to the heroku remote)
+		heroku run flask deploy   (initializes the database tables)
+		heroku restart   (restarted so that it starts cleanly with an updated database)
+	heroku logs    (To view the contents of the log)
+
+** After all the changes have been committed to the Git repository, the following commands perform an upgrade if in case
+	$ heroku maintenance:on
+	$ git push heroku master
+	$ heroku run flask deploy
+	$ heroku restart
+	$ heroku maintenance:off
+============================================================================
+*Docker Containers*
+============================================================================
+Windows Powershell
+https://docs.docker.com/language/python/
+Dockerfile: container image build script (https://docs.docker.com/develop/develop-images/dockerfile_best-practices/)
+============================================================================
+*Server Setup*
+There are several administration tasks that must be performed on the server before it can host applications:
+
+Install a database server such as MySQL or Postgres. Using an SQLite database is also possible but is not recommended for a production server due to its many limitations with regard to modification of existing database schemas.
+
+Install a Mail Transport Agent (MTA) such as Sendmail or Postfix to send email out to users. Using Gmail in a production application is not possible, as this service has very restrictive quotas and specifically prohibits commercial use in its terms of service.
+
+Install a production-ready web server such as Gunicorn or uWSGI.
+
+Install a process-monitoring utility such as Supervisor, that immediately restarts the web server if it crashes or after the host is power-cycled.
+
+Install and configure an SSL certificate to enable secure HTTP.
+
+(Optional but highly recommended) Install a front-end reverse proxy web server such as nginx or Apache. This server is configured to serve static files directly and forward application requests into the application’s web server, which is listening on a private port on localhost.
+
+Secure the server. This includes several tasks that have the goal of reducing vulnerabilities in the server such as installing firewalls, removing unused software and services, and so on.
+
+*TIP*
+Instead of manually performing these tasks, create a scripted deployment using an automation framework such as Ansible, Chef, or Puppet.

@@ -1,0 +1,60 @@
+{% extends "base__.html" %}
+
+
+{% block page_content%}
+
+<h1>Let's see</h1>
+Check out: Keep up good health as always <a href="/namsinsulin">Details</a> /
+Coming deadline: "{{upcomingdeadline.duty}}" {%if upcomingdeadline.deadline_time%}with{{moment(current_time).toTime(upcomingdeadline.deadline_time)}} {%endif%} <a href="{{url_for('.viewalldeadlines')}}">More about deadlines</a><br>
+Today: {{todayshow}}; <span class="badge">{{numberof_todayedtasks}}</span> task(s) coming; task ahead: "<a href="{{url_for('.namslifeupdated')}}#{{nexttask.id}}">{{nexttask.taskname}}</a>". <span><a href="{{url_for('.namslifetoday')}}" class="btn btn-default">&nbsp&nbsp&nbspToday&nbsp&nbsp&nbsp</a></span>&nbsp <span><a href="{{url_for('.namslifetomorrow')}}" class="btn btn-default">&nbspTomorrow&nbsp</a></span>&nbsp <span><a href="{{url_for('.namslifethisweek')}}" class="btn btn-default">&nbspThis week&nbsp</a></span>&nbsp <span><a href="{{url_for('.namslifenextweek')}}" class="btn btn-default">&nbspNext week&nbsp</a></span>
+<br><br>
+<hr>
+
+<h3 id="allthetasks">Tasks</h3><br>
+{% for task in tasks %}
+{%if task.trashed==False or task.trashed==None%}
+<ul id={{task.id}}>{%if task==nexttask and outdatedtasks_exist==True and task.finished!=True%}<hr><h4>Next tasks</h4>{%endif%}{%if not task.finished%}<a href="{{url_for('.taskfullview', task_id=task.id)}}" class="label label-primary">View details..</a>{%endif%}
+{%if not task.finished%}<div class="panel panel-primary">{%endif%}
+{%if task.finished%}&nbsp&nbsp&nbsp&nbsp<a href="{{url_for('.namsupdatetask', id=task.id)}}" class="btn btn-danger">Reactivate</a><span>&nbsp&nbsp{{task.taskname}}</span>{%endif%}
+{%if not task.finished%}<br>&nbsp&nbsp&nbsp&nbsp<a href="{{url_for('.namsupdatetask', id=task.id)}}" class="btn btn-warning">Update</a><span>&nbsp&nbsp{{task.taskname}}</span>{%endif%}<br>
+<span>&nbsp&nbsp&nbsp&nbsp{%if task.runtime_todayed==True%}Today{%endif%} {{ moment(task.runtime, local=True).format('LLL') }} {%if task.overlapping%}[Overlapping]{%endif%}</span><br>
+<span>&nbsp&nbsp&nbsp&nbsp{% if task.info_show %}
+               {{ task.info_show | safe }}
+           {% else %}
+               {{ task.info }}
+           {% endif %}</span><br><br>
+<p>
+<span>&nbsp&nbsp&nbsp&nbsp{{task.Tasktype.name}} purpose</span> |
+<span>&nbsp&nbsp&nbsp&nbsp{{task.priority}} priority</span> |
+<span>&nbsp&nbsp&nbsp&nbsp{{moment(current_time).toTime(task.runtime)}}</span>{%if task.finished%} <a href="{{url_for('.taskfullview', task_id=task.id)}}" class="label label-primary">View</a></p>{%endif%}{%if not task.finished%} <a href="{{url_for('.namsmarktaskfinished', id=task.id)}}" class="label label-primary">Mark "Finished"</a>{%endif%}
+</p>
+{%if not task.finished%}</div>{%endif%}
+</ul>
+{%endif%}
+{% endfor %}
+
+<br><br>
+{% import "_macros_nam.html" as macros %}
+{{ macros.pagination_widget(pagination, '.namslife') }}
+
+<table align="right">
+  <tr>
+    <td><span align="center"> <a href="{{url_for('.namslife')}}#allthetasks">Available</a> <span class="badge">{{numberof_availabletasks}}</span></td>
+    <td>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</td>
+    <td><a href="{{url_for('.outdatedtasks')}}">Already run</a> <span class="badge">{{numberof_alloutdatedtasks}}</span></td>
+<td>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</td>
+    <td><a href="{{url_for('.finishedtasks')}}">Marked-as-finished</a> <span class="badge">{{numberof_allfinishedtasks}}</span></td>
+<td>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</td>
+    <td></td>
+  </tr>
+</table>
+<br><br>
+<span id="namslife_form">&nbsp</span>
+
+<br>{% import "bootstrap/wtf.html" as wtf %}
+<div align="center">
+    {{ wtf.quick_form(form, form_type="horizontal") }}
+</div>
+
+<h1 align="right"><a href="/tasktrashbin">🗑</a></h1><hr>
+{% endblock %}

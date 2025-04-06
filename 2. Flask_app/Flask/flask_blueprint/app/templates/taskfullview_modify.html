@@ -1,0 +1,23 @@
+{% extends "base__.html"%}
+
+
+{% block page_content %}
+
+
+<br><br><h2>Modification</h2><hr>
+<table>
+  <tr>
+    <td>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</td>
+<td>
+  {% import "bootstrap/wtf.html" as wtf %}
+  <span align="center">
+      {{ wtf.quick_form(form, form_type="horizontal") }}
+  </span>
+</td>
+  </tr>
+</table>
+<hr>
+<a class="btn btn-default" href="{{url_for('.taskfullview', task_id=task_id)}}">Back</a> <a class="btn btn-default" href="{{url_for('.modifytask', task_id=task.id)}}">Remodify</a> {%if task.trashed!=True%}<a class="btn btn-default" href="{{url_for('.trashmovetask', task_id=task.id)}}">Move to Trash</a>{%endif%} <a class="btn btn-default" href="{{url_for('.deletetask', task_id=task.id)}}">Permanent Delete</a><br><br>
+
+
+{% endblock %}

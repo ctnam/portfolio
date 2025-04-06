@@ -1,0 +1,5 @@
+Flask
+apache-libcloud
+lockfile
+six
+python-slugify

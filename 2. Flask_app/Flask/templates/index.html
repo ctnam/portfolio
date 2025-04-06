@@ -1,0 +1,11 @@
+
+
+{% extends 'base.html' %}
+
+{% block page_content %}
+
+<p>The local date and time: {{ moment(current_time).format('LLLL') }}.</p>
+<p>That was {{ moment(current_time).fromNow(refresh=True) }}</p>
+<p>Dir(db): {{ dirdb }}</p>
+
+{% endblock %}

@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+
+{% block title %}Flaske - Unconfirmed status{% endblock %}
+
+
+{% block page_content %}
+<div class="page-header">
+  <h1>
+    Hello,
+    {% if current_user.is_authenticated %}
+        {{ current_user.username }}
+    {% else %}
+        Stranger
+    {% endif %}!
+  </h1>
+</div>
+<h2>You have not confirmed your account yet.</h2>
+<p>Before you can have full access, you must confirm your account. Please check your mailbox with the confirmation link already sent.</p>
+<p>Need another confirmation email? </p>
+<br>
+<div class="col-md-4">
+    {{ wtf.quick_form(form) }}
+</div>
+{% endblock %}

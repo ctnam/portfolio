@@ -1,0 +1,57 @@
+{% extends "base__.html"%}
+
+
+{% block page_content %}
+
+<br><br><h2>{{task.taskname}} {%if task.trashed==True%}🗑{%endif%}</h2><br><br>
+
+<ul>
+
+<table class="bordered table">
+  <tr>
+    <td>ID:</td><td>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</td><td>{{task.id}}</td>
+  </tr>
+  <tr>
+    <td>Info:</td><td>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</td><td>{% if task.info_show %}
+                   {{ task.info_show | safe }}
+               {% else %}
+                   {{ task.info }}
+               {% endif %}</td>
+  </tr>
+  <tr>
+    <td>Runtime:</td><td>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</td><td>{{moment(task.runtime, local=True).format('LLLL')}} {%if task.overlapping%}[Overlapping]{%endif%}</td>
+  </tr>
+  <tr>
+    <td>Endtime:</td><td>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</td><td>{{moment(task.est_endtime, local=True).format('LLLL')}} {%if task.overlapping%}[Overlapping]{%endif%}</td>
+  </tr>
+  <tr>
+    <td>Finished:</td><td>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</td><td>{%if task.finished%}Yes{%endif%}{%if not task.finished%}No{%endif%}</td>
+  </tr>
+  <tr>
+
+  </tr>
+  <tr>
+      <td>Priority:</td><td>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</td><td>{{task.priority}}</td>
+  </tr>
+  <tr>
+      <td>Description:</td><td>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</td><td>{{task.desc}}</td>
+  </tr>
+  <tr>
+      <td>Result:</td><td>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</td><td>{{task.result}}</td>
+  </tr>
+  <tr>
+      <td>Type of task:</td><td>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</td><td>{{task.Tasktype.name}}</td>
+  </tr>
+  <tr>
+      <td>Last updated:</td><td>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</td><td>{{moment(task.thisinfo_lastupdatetime, local=True).format('LLLL')}}</td>
+  </tr>
+  <tr>
+      <td>Creation timepoint:</td><td>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</td><td>{{moment(task.thisinfo_creationtime, local=True).format('LLLL')}}</td>
+  </tr>
+</table>
+
+</ul><br>
+
+<a class="btn btn-default" href="{{url_for('.namslife')}}">Home</a> <a class="btn btn-default" href="{{url_for('.namslife')}}#namslife_form">Search</a>
+   <a class="btn btn-default" href="{{url_for('.modifytask', task_id=task.id)}}">Modify</a> {%if task.trashed!=True%}<a class="btn btn-default" href="{{url_for('.trashmovetask', task_id=task.id)}}">Move to Trash</a>{%endif%} <a class="btn btn-default" href="{{url_for('.deletetask', task_id=task.id)}}">Permanent Delete</a><br><br>
+{% endblock %}

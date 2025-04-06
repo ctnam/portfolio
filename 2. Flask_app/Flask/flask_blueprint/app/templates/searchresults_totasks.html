@@ -1,0 +1,17 @@
+{% extends "base__.html"%}
+
+
+{% block page_content %}
+
+<br><br><h2>Searched {{numberofresults}} {{result_or_results}}:</h2><hr>
+{% for matchingtask in matchingtasks%}
+<h4>{{matchingtask.taskname}} {%if matchingtask.trashed==True%}🗑{%endif%}</h4>
+<p><span class="label label-info">Info:</span> {{matchingtask.info}}</p>
+<p><span class="label label-info">Runtime:</span> {{moment(matchingtask.runtime, local=True).format('LL')}} <a href="{{url_for('main.taskfullview', task_id=matchingtask.id)}}">..More about..</a></p>
+<br>
+{% endfor %}
+
+{% import "_macrosforsearch.html" as macros %}
+{{ macros.pagination_widget(pagination, '.namstask_searchresults', keyword_id=keyword_id) }}
+
+{% endblock %}

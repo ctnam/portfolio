@@ -1,0 +1,44 @@
+Coding Projects — Portfolio of Own builds
+(Coding in a programming language - as opposed to Lowcode programming)
+Author contact: namt.cao@outlook.de
+--------------------------------------------------------------------------------------------------------------------------------------------
+Hello World, coding to me is a pastime which makes fun, motivation; and solves problems. The modules as integrated might be helpful sources.
+--------------------------------------------------------------------------------------------------------------------------------------------
+Module 1
+-Properties: Python, script
+-Creation time: 18.7.2021 / Last modification: 19.7.2021
+-Status: Public for share
+-Features: Preparation before semester oral exams / ETL (extract-transfer-load) on question bank data / Random question pop-up / .txt local
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Module 2
+-Properties: Python, Flask framework, web app
+-Creation time: 12.9.2021 / Last modification: 19.9.2021
+-Status: Public for share
+-Features: Web app with forms / Time-based scheduling / Inventory monitoring on quantities / SQLite local
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Module 3
+-Properties: Java, SE (Standard Edition), No GUI
+-Creation time: 25.10.2023 / Last modification: 13.11.2023
+-Status: Public for share
+-Features: Procedure for mututal messaging / Self-motivation into concepts to implement: layered security, favorite syntaxes, effective operation, great teamwork / co. with 360T / Database unavailable
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Module 4
+-Properties: Python, ETL, script, API-programming
+-Creattion time: 14.11.2024 / Last modification: 18.2.2025
+-Status: Constrainted beta
+-Features: ETL on articles from Google Scholar / Statistical analyse / If applicable, machine learning models for prediction / Web data, .csv local
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Module 5
+-Properties: Java, Spring Boot, web app
+-Creation time: 22.2.2025 / Last modification: 25.3.2025
+-Status: Errored
+-Features: Update and share the current status / Blog / Homesite / MySQL local, RDS on Amazon
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Module 6
+-Properties: Python, script
+-Creation time: 12.3.2025 / Last modification: 22.3.2025
+-Status: Public for share
+-Features: Grade conversion / ETL on available conversion chart data / Linear regression then prediction / .csv local
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Ref.: pluralsight, udemy

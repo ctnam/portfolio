@@ -1,0 +1,9 @@
+{% extends "base.html" %}
+
+{% block page_content %}
+  <h4>Info</h4>
+  Built by <span class="label label-default">tnam</span>
+  Engined by <span class="label label-default">Flask</span>
+  Buildtime <span class="label label-default">2021</span><br>
+  Current timestamp: {{moment(now, local=True).format('LLLL')}}.
+{% endblock %}

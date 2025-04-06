@@ -1,0 +1,75 @@
+
+{% extends "mailbase.html"%}
+{%import "bootstrap/wtf.html" as wtf%}
+
+
+{% block page_content %}
+
+<br><br>
+<h2>{%if nextweek%}Next week{%else%}This week{%endif%}</h2><hr>
+<ul>
+<h4>Monday</h4>
+<div class="jumbotron">
+{% for t in mon_tasks%}
+<ul>
+<p><li>{{t.taskname}} | {% if t.info_show %}{{ t.info_show | safe }}{% else %}{{ t.info }}{% endif %} | Runtime: {{t.runtime}} | Endtime: {{t.est_endtime}} {%if t.overlapping%}[Overlapping]{%endif%}
+</li></p>
+</ul>
+{% endfor %}
+</div>
+<h4>Tuesday</h4>
+<div class="jumbotron">
+{% for t in tue_tasks%}
+<ul>
+<p><li>{{t.taskname}} | {% if t.info_show %}{{ t.info_show | safe }}{% else %}{{ t.info }}{% endif %} | Runtime: {{t.runtime}} | Endtime: {{t.est_endtime}} {%if t.overlapping%}[Overlapping]{%endif%}
+</li></p>
+</ul>
+{% endfor %}
+</div>
+<h4>Wednesday</h4>
+<div class="jumbotron">
+{% for t in wed_tasks%}
+<ul>
+<p><li>{{t.taskname}} | {% if t.info_show %}{{ t.info_show | safe }}{% else %}{{ t.info }}{% endif %} | Runtime: {{t.runtime}} | Endtime: {{t.est_endtime}} {%if t.overlapping%}[Overlapping]{%endif%}
+</li></p>
+</ul>
+{% endfor %}
+</div>
+<h4>Thursday</h4>
+<div class="jumbotron">
+{% for t in thur_tasks%}
+<ul>
+<p><li>{{t.taskname}} | {% if t.info_show %}{{ t.info_show | safe }}{% else %}{{ t.info }}{% endif %} | Runtime: {{t.runtime}} | Endtime: {{t.est_endtime}} {%if t.overlapping%}[Overlapping]{%endif%}
+</li></p>
+</ul>
+{% endfor %}
+</div>
+<h4>Friday</h4>
+<div class="jumbotron">
+{% for t in fri_tasks%}
+<ul>
+<p><li>{{t.taskname}} | {% if t.info_show %}{{ t.info_show | safe }}{% else %}{{ t.info }}{% endif %} | Runtime: {{t.runtime}} | Endtime: {{t.est_endtime}} {%if t.overlapping%}[Overlapping]{%endif%}
+</li></p>
+</ul>
+{% endfor %}
+</div>
+<h4>Saturday</h4>
+<div class="jumbotron">
+{% for t in sat_tasks%}
+<ul>
+<p><li>{{t.taskname}} | {% if t.info_show %}{{ t.info_show | safe }}{% else %}{{ t.info }}{% endif %} | Runtime: {{t.runtime}} | Endtime: {{t.est_endtime}} {%if t.overlapping%}[Overlapping]{%endif%}
+</li></p>
+</ul>
+{% endfor %}
+</div>
+<h4>Sunday</h4>
+<div class="jumbotron">
+{% for t in sun_tasks%}
+<ul>
+<p><li>{{t.taskname}} | {% if t.info_show %}{{ t.info_show | safe }}{% else %}{{ t.info }}{% endif %} | Runtime: {{t.runtime}} | Endtime: {{t.est_endtime}} {%if t.overlapping%}[Overlapping]{%endif%}
+</li></p>
+</ul>
+{% endfor %}
+</div>
+</ul>
+{% endblock %}

@@ -1,0 +1,38 @@
+
+{% extends "mailbase.html"%}
+{%import "bootstrap/wtf.html" as wtf%}
+
+
+{% block page_content %}
+
+<br><br>
+<h2>{%if tomorrow%}Tomorrow{%else%}Today{%endif%}</h2><hr>
+
+
+<ul>
+<h4>Morning</h4>
+{% for t in morningtasks%}
+<div>
+<ul>
+<li>{{t.taskname}} | {% if t.info_show %}{{ t.info_show | safe }}{% else %}{{ t.info }}{% endif %} | Runtime: {{t.runtime}} | Endtime: {{t.est_endtime}} {%if t.overlapping%}[Overlapping]{%endif%}</li>
+</ul>
+</div>
+{% endfor %}<br>
+<h4>Afternoon</h4>
+{% for t in afternoontasks%}
+<div>
+<ul>
+<li>{{t.taskname}} | {% if t.info_show %}{{ t.info_show | safe }}{% else %}{{ t.info }}{% endif %} | Runtime: {{t.runtime}} | Endtime: {{t.est_endtime}} {%if t.overlapping%}[Overlapping]{%endif%}</li>
+</ul>
+</div>
+{% endfor %}<br>
+<h4>Evening</h4>
+{% for t in eveningtasks%}
+<div>
+<ul>
+<li>{{t.taskname}} | {% if t.info_show %}{{ t.info_show | safe }}{% else %}{{ t.info }}{% endif %} | Runtime: {{t.runtime}} | Endtime: {{t.est_endtime}} {%if t.overlapping%}[Overlapping]{%endif%}</li>
+</ul>
+</div>
+{% endfor %}<br>
+</ul>
+{% endblock %}

@@ -1,0 +1,120 @@
+{% extends "bootstrap/base.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+
+{% block title %}Nam's Insulin database{% endblock %}
+
+{% block scripts %}
+{{ super() }}
+{{ moment.include_moment() }}
+{{ pagedown.include_pagedown() }}
+<!--{{ moment.locale('es') }}-->
+{% endblock %}
+
+
+
+{% block navbar %}
+<div class="navbar navbar-inverse" role="navigation">
+    <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle"
+             data-toggle="collapse" data-target=".navbar-collapse">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="{{url_for('main.about')}}">Flask 🤵 Blueprints</a>
+        </div>
+
+        <div class="navbar-collapse collapse">
+            <ul class="nav navbar-nav">
+                <li><a href="/">World around</a></li>
+                {% if current_user.is_authenticated %}
+                <li><a href="{{url_for('main.namslife')}}">Home</a></li>
+                {% endif %}
+            </ul>
+<!--Above is left navbar, below is right-->
+            <ul class="nav navbar-nav navbar-right">
+                {% if current_user.is_authenticated %}
+                <li><a href="{{ url_for('main.user', username=current_user.username) }}">Profile</a></li>
+                <li><a href="{{ url_for('auth.logout') }}">Log ⚙ut</a></li>
+                {% else %}
+                <li><a href="{{ url_for('auth.login') }}">Log In</a></li>
+                {% endif %}
+            </ul>
+        </div>
+
+    </div>
+</div>
+{% endblock %}
+
+
+
+{% block content %}
+<div class="container" id="mainview">
+    {% for message in get_flashed_messages() %}
+    <div class="alert alert-warning">
+        <button type="button" class="close" data-dismiss="alert">&times;</button>
+{{ message }} {%if "database" not in message%}{%if insulin_removepersonaluse_besidesdatabase==True%}<a href="{{url_for('.namsinsulin_removalusealso', id=insulinid_removeusealso)}}">Yes</a> / <a href="{{url_for('.namsinsulin_addnewtype')}}">No</a>.{%endif%}{%endif%}
+    </div>
+    {% endfor %}
+
+
+
+
+    {% block page_content %}
+
+
+<br><a href="/namsinsulin">Back to Insulin Mainpage</a>
+<h2><span>Current types of Insulin</span></h2>
+<h4>You currently have {{numberof_datainsulins}} type(s) of Insulin in database:</h4>
+{%for datainsulin in alldatainsulins%}<ul class="panel panel-default">
+    <table>
+      <tr>
+        <td>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</td>
+      </tr>
+      <tr>
+        <td>Name</td><td>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</td><td><b>{{datainsulin.full_name}}</b></td>
+      </tr>
+      <tr>
+        <td>ID</td><td>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</td><td>{{datainsulin.id}}</td>
+      </tr>
+      <tr>
+        <td>Usage notice, identity properties</td><td>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</td><td>{% if datainsulin.full_descriptionshow %}{{ datainsulin.full_descriptionshow | safe }}{% else %}{{ datainsulin.full_description }}{% endif %}</td>
+      </tr>
+      <tr>
+        <td>Currently in use</td><td>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</td><td>{%if datainsulin.NamisUsing%}Yes{%endif%}{%if not datainsulin.NamisUsing%}No{%endif%} {%if datainsulin.NamisUsing!=True%}<a class="label label-warning" href="{{url_for('.activatenamsinsulindb', insulin_id=datainsulin.id)}}">Begin using</a>{%endif%}{%if datainsulin.NamisUsing==True%}<a class="label label-primary" href="{{url_for('.deactivatenamsinsulindb', insulin_id=datainsulin.id)}}">Stop using</a>{%endif%}</td>
+      </tr>
+      <tr>
+<td></td><td></td><td><hr></td>
+      </tr>
+      <tr>
+        <td>Storing unit</td><td>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</td><td>{{datainsulin.storing_unit}}</td>
+      </tr>
+      <tr>
+        <td>Quantity in each storing unit</td><td>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</td><td>{{datainsulin.amount_perstoringunit}}</td>
+      </tr>
+      <tr>
+<td></td><td></td><td><hr></td>
+      </tr>
+      <tr>
+        <td>Manufactuer</td><td>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</td><td>{{datainsulin.manufacturer}}</td>
+      </tr>
+      <tr>
+        <td>Origin</td><td>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</td><td>{{datainsulin.origin}}</td>
+      </tr>
+    </table>
+<p align="right"><a class="btn btn-default" href="{{url_for('.namsinsulin_amendment', id=datainsulin.id)}}">&nbsp&nbsp&nbsp&nbspAmend&nbsp&nbsp&nbsp&nbsp</a></p>
+</ul>{%endfor%}
+
+<br><br><h3 align="center"><span>Add one new type of Insulin to database</span></h3><br>
+
+    {% import "bootstrap/wtf.html" as wtf %}
+    <div align="center">
+        {{ wtf.quick_form(form, form_type="horizontal") }}
+    </div><br>
+
+    {% endblock %}
+
+</div>
+{% endblock %}

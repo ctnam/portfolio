@@ -1,0 +1,71 @@
+ 
+
+modify_currentamount = False
+add_pumpchanges = False
+
+modify_currentamount = bool(request.cookies.get('modify_currentamount', ''))
+add_pumpchanges = bool(request.cookies.get('add_pumpchanges', ''))
+
+if add_pumpchanges==True and modify_currentamount==False:
+    form = addpumpchanges_form
+if modify_currentamount==True and add_pumpchanges==False:
+    form = modifycurrentamount_form
+if modify_currentamount==False and add_pumpchanges==False:
+    form = addnewpurchase_form
+
+from flask import make_response
+@main.route('/namsinsulin/addnewpurchase')
+@login_required
+def add_newpurchase():
+    resp = make_response(redirect(url_for('.namsinsulin')))
+    resp.set_cookie('modify_currentamount', '', max_age=30*24*60*60)
+    resp.set_cookie('add_pumpchanges', '', max_age=30*24*60*60)
+    return resp
+@main.route('/namsinsulin/modifycurrentamount')
+@login_required
+def modify_currentamount():
+    resp = make_response(redirect(url_for('.namsinsulin')))
+    resp.set_cookie('modify_currentamount', '1', max_age=30*24*60*60)
+    resp.set_cookie('add_pumpchanges', '', max_age=30*24*60*60)
+    return resp
+@main.route('/namsinsulin/addpumpchanges')
+@login_required
+def add_pumpchanges():
+    resp = make_response(redirect(url_for('.namsinsulin')))
+    resp.set_cookie('add_pumpchanges', '1', max_age=30*24*60*60)
+    resp.set_cookie('modify_currentamount', '', max_age=30*24*60*60)
+    return resp
+
+
+    <ul class="nav nav-tabs">
+        <li{% if not modify_currentamount and not add_pumpchanges%} class="active"{% endif %}><a href="{{ url_for('.add_newpurchase') }}">Add new purchase</a></li>
+        <li{% if modify_currentamount %} class="active"{% endif %}><a href="{{ url_for('.modify_currentamount') }}">Modify current average pump rates, current amount</a></li>
+        <li{% if add_pumpchanges %} class="active"{% endif %}><a href="{{ url_for('.add_pumpchanges') }}">Add pump changes</a></li>
+    </ul>
+
+
+<h4>UTCnow Moment: {{ moment(utcnow).format('LLLL') }}</h4>
+UTCNow {{ utcnow }}
+<br>
+{% if t2_timestamp %}
+<h4>Deadline: {{ moment(t1_timestamp).toTime(t2_timestamp) }}</h4> (Details: {{ r }})
+<h4>Deadline: {{ moment(t2_timestamp).diff(t1_timestamp, units='minutes', refresh=True) }} Minutes</h4>
+{% endif %}
+
+
+<!--
+{% import "_macros.html" as macros %}
+<div class="pagination">
+    {{ macros.pagination_widget(pagination, '.post', id=post.id) }}
+</div>
+-->
+
+
+wtforms/ext/django/orm.py   [convert Django->Flask]
+flask_wtf/recaptcha/fields.py
+flask_wtf/file.py
+
+werkzeug/wrappers/request
+werkzeug/wrappers/response
+
+flask/helpers.py   (send_from_directory)

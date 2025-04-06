@@ -1,0 +1,144 @@
+{% extends "bootstrap/base.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+
+{% block title %}Nam's Insulin Page{% endblock %}
+
+{% block scripts %}
+{{ super() }}
+{{ moment.include_moment() }}
+{{ pagedown.include_pagedown() }}
+<!--{{ moment.locale('es') }}-->
+{% endblock %}
+
+
+
+{% block navbar %}
+<div class="navbar navbar-inverse" role="navigation">
+    <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle"
+             data-toggle="collapse" data-target=".navbar-collapse">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="{{url_for('main.about')}}">Flask 🤵 Blueprints</a>
+        </div>
+
+        <div class="navbar-collapse collapse">
+            <ul class="nav navbar-nav">
+                <li><a href="/">World around</a></li>
+                {% if current_user.is_authenticated %}
+                <li><a href="{{url_for('main.namslife')}}">Home</a></li>
+                {% endif %}
+            </ul>
+<!--Above is left navbar, below is right-->
+            <ul class="nav navbar-nav navbar-right">
+                {% if current_user.is_authenticated %}
+                <li><a href="{{ url_for('main.user', username=current_user.username) }}">Profile</a></li>
+                <li><a href="{{ url_for('auth.logout') }}">Log ⚙ut</a></li>
+                {% else %}
+                <li><a href="{{ url_for('auth.login') }}">Log In</a></li>
+                {% endif %}
+            </ul>
+        </div>
+
+    </div>
+</div>
+{% endblock %}
+
+
+
+{% block content %}
+<div class="container" id="mainview">
+    {% for message in get_flashed_messages() %}
+    <div class="alert alert-warning">
+        <button type="button" class="close" data-dismiss="alert">&times;</button>
+        {{ message }} {%if newinsulinadded==True%}<a href="{{url_for('.activatenamsinsulin', insulin_id=newinsulin_id)}}">Yes</a> / <a href="{{url_for('.deactivatenamsinsulin', insulin_id=newinsulin_id)}}">No.</a>{%endif%}
+    </div>
+    {% endfor %}
+
+
+
+
+    {% block page_content %}
+
+
+    <br><br><a href="/namsinsulin/addnewtype" id="pagehead">Into my Insulin database</a><h1>Let's see 👨‍⚕️</h1>
+    <h4>Number of Insulin types currently in use: {{numberofinsulins}}</h4>{%if alertnotification%}<p align="left"><a class="btn btn-danger" href="#namsinsulinform">ALERT: CHECK YOUR INSULIN SOURCES!</a></p>{%endif%}
+    <div align="right" id="settings">
+      {{ wtf.quick_form(formsetting, form_type="inline") }}
+    </div><br><hr>
+
+
+<div class="insulinpage">
+    <ul class="nav nav-tabs">
+        <li{% if not modify_currentamount and not add_pumpchanges and not update_info %} class="active"{% endif %}><a  href="{{ url_for('.add_newpurchase') }}#namsinsulinform">Add up Insulin</a></li>
+        <li{% if modify_currentamount %} class="active"{% endif %}><a href="{{ url_for('.modify_currentamount') }}#namsinsulinform">Modify current average pump rates, current amount</a></li>
+        <li{% if add_pumpchanges %} class="active"{% endif %}><a href="{{ url_for('.add_pumpchanges') }}#namsinsulinform">Add pump variation</a></li>
+        <li{% if update_info %} class="active"{% endif %}><a href="{{ url_for('.update_info') }}#namsinsulinform">Update info</a></li>
+    </ul>
+
+<br><br>
+<table>
+  <tr>
+
+<td>
+      {% import "bootstrap/wtf.html" as wtf %}
+      <div align="center" id="namsinsulinform">
+          {{ wtf.quick_form(form, form_type="horizontal") }}
+      </div>
+</td>
+
+<td>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</td>
+
+<td>
+<table class="bordered table">
+{%for i in allinsulins%}
+
+
+<tr>
+      <td><b class="label label-primary">{{i.insulin_name}}</b></td> <td>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</td> <td></td>
+</tr>
+<tr>
+      <td>{%if i.alerted%}<b>{%endif%}{{i.current_amount}}u ~ {{i.numberofdays_enoughinsulin}} day(s){%if i.alerted%}</b>{%endif%}</td> <td>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</td> <td>Currently remaining</td>
+</tr>
+<tr>
+      <td>{{i.avgamount_pertime}}u per time / {{i.avgamount_perday}}u per day</td> <td>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</td> <td>Injection level</td>
+</tr>
+<tr>
+
+</tr>
+<tr>
+      <td>{% if i.info_show %}{{ i.info_show | safe }}{% else %}{{ i.info }}{% endif %}</td> <td>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</td> <td>Personal information about this type of Insulin</td>
+</tr>
+<tr>
+
+</tr>
+<tr>
+      <td>{{i.last_purchasetime}}</td> <td>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</td> <td>Last time Insulin added up</td>
+</tr>
+<tr>
+      <td>{{i.lastpurchasetime_info}}</td> <td>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</td> <td>Information about that add-up</td>
+</tr>
+<tr>
+      <td>{{i.startusing_since}}</td> <td>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</td> <td>Start using this Insulin since</td>
+</tr>
+
+
+{%endfor%}
+</table>
+
+</td>
+
+
+
+  </tr>
+</table>
+
+</div>
+
+    {% endblock %}
+<br><br></div>
+{% endblock %}

@@ -1,0 +1,127 @@
+{% extends "bootstrap/base.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+
+
+{% block title %}Deadlines to Nam{% endblock %}
+
+{% block scripts %}
+{{ super() }}
+{{ moment.include_moment() }}
+{{ pagedown.include_pagedown() }}
+<!--{{ moment.locale('es') }}-->
+{% endblock %}
+
+
+
+
+
+{% block navbar %}
+<div class="navbar navbar-inverse" role="navigation">
+    <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle"
+             data-toggle="collapse" data-target=".navbar-collapse">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="{{url_for('main.about')}}">Flask 🤵 Blueprints</a>
+        </div>
+
+        <div class="navbar-collapse collapse">
+            <ul class="nav navbar-nav">
+                <li><a href="/">World around</a></li>
+                {% if current_user.is_authenticated %}
+                <li><a href="{{url_for('main.namslife')}}">Home</a></li>
+                {% endif %}
+            </ul>
+<!--Above is left navbar, below is right-->
+            <ul class="nav navbar-nav navbar-right">
+                {% if current_user.is_authenticated %}
+                <li><a href="{{ url_for('main.user', username=current_user.username) }}">Profile</a></li>
+                <li><a href="{{ url_for('auth.logout') }}">Log ⚙ut</a></li>
+                {% else %}
+                <li><a href="{{ url_for('auth.login') }}">Log In</a></li>
+                {% endif %}
+            </ul>
+        </div>
+
+    </div>
+</div>
+{% endblock %}
+
+
+
+{% block content %}
+<div class="container" id="mainview">
+    {% for message in get_flashed_messages() %}
+    <div class="alert alert-warning">
+        <button type="button" class="close" data-dismiss="alert">&times;</button>
+        {{ message }}
+    </div>
+    {% endfor %}
+
+
+
+
+    {% block page_content %}
+
+
+    <h2>‍Hello Nam,</h2>
+
+    <hr><p align="right"><a class="btn btn-default" href="{{url_for('.viewalldeadlines')}}">Back</a></p><br>
+
+<div class="submitdealineform" align="center"><form method="post"><table>
+
+<tr>
+  <td></td><td>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</td><td><span align="center"><h3><b>Enter your mission</b>🎯</h3></span></td>
+</tr>
+<tr>
+  <td>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</td>
+</tr>
+  <tr>
+    <td><b>Title</b></td><td>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</td><td><input {%if deadlinetotask%}value="{{mission_name}}"{%endif%} type="text" name="title_box" size=60em required></td>
+  </tr>
+  <tr>
+    <td>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</td>
+  </tr>
+  <tr>
+    <td><b>Date and time</b></td><td>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</td><td><input type="datetime-local" name="datetime_box" required></td>
+  </tr>
+  <tr>
+    <td>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</td>
+  </tr>
+  <tr>
+    <td><b>Remember information</b></td><td>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</td><td><textarea cols=68 rows=3 name="rememberinfo_box" placeholder="Let's see.." required></textarea></td>
+  </tr>
+  <tr>
+    <td>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</td>
+  </tr>
+  <tr>
+    <td><b>Image URL</b></td><td>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</td><td><input type="url" name="imageurl_box" size=60em></td>
+  </tr>
+  <tr>
+    <td>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</td>
+  </tr>
+  <tr>
+    <td>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</td>
+  </tr>
+  <tr>
+    <td></td><td>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</td><td><p align="center"><button class="btn btn-success" type="submit" name="button"><b>Submit</b></button></p></td>
+  </tr>
+
+</table><br>
+
+</form>
+
+
+<br><br>
+
+
+</div>
+
+
+    {% endblock %}
+</div>
+{% endblock %}

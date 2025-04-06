@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+
+
+{% block page_content%}
+
+<h1>Let's see</h1>
+📋 Check out: <a href="#">Details..</a>
+📅 My upcoming deadline: <a href="#">More about deadlines..</a>
+👔 My next task: <a href="#allthetasks">More about tasks..</a><hr>
+
+<h3 id="allthetasks">Tasks</h3>
+{% for task in tasks %}
+<ul>{%if not task.finished%}<li>{%endif%}
+<div class="panel panel-default">
+<h3><span class="label label-danger">{{task.taskname}}</span>
+<span class="label label-default">{{ moment(task.runtime, local=True).format('LLLL') }}</span>
+<span class="label label-info">{{task.info}}</span></h3>
+<p>
+<span>&nbsp&nbsp&nbsp&nbsp{{task.Tasktype.name}} purpose</span> |
+<span>&nbsp&nbsp&nbsp&nbsp{{task.priority}} priority</span> |
+<span>&nbsp&nbsp&nbsp&nbsp{% if task.finished==False %}<b>Running</b>{% endif %}{% if task.finished==True %}Finished{% endif %}</span> |
+<span>&nbsp&nbsp&nbsp&nbsp....{{moment(current_time).toTime(task.runtime)}}</span> <a href="{{url_for('.namsupdatetask', id=task.id)}}" class="btn btn-default">Update</a>
+</p>
+<p>&nbsp&nbsp&nbsp&nbspFull description: {%if task.desc%}{{task.desc}}{%endif%}</p>
+<p>&nbsp&nbsp&nbsp&nbspResult: {%if task.result%}{{task.result}}{%endif%}</p><br>
+</div>
+{%if not task.finished%}</li>{%endif%}</ul>
+{% endfor %}
+
+<br><br>{% import "bootstrap/wtf.html" as wtf %}
+<div class="commentform" align="center">
+    {{ wtf.quick_form(form, form_type="horizontal") }}
+</div>
+
+{% import "_macros_nam.html" as macros %}
+{{ macros.pagination_widget(pagination, '.namslife') }}
+<hr>
+{% endblock %}

@@ -1,0 +1,20 @@
+{% extends "base__.html"%}
+
+
+{% block page_content %}
+
+<br><br>
+<p><a href="/tasktrashbin/emptyall">Empty trash bin</a></p>
+<h2>🗑 {{numberofpieces}} {{piece_or_pieces}}</h2><hr>
+{% for t in trashedtasks%}
+<p><span class="label label-default">Name:</span> {{t.taskname}}</p>
+<p><span class="label label-default">Info:</span> {{t.info}}</p>
+<p><span class="label label-default">Runtime:</span> {{moment(t.runtime, local=True).format('LL')}}
+  <a class="btn btn-default" href="{{url_for('.taskfullview', task_id=t.id)}}">View</a> <a class="btn btn-default" href="{{url_for('.taskrecovery', recover_taskid=t.id)}}">Recover</a> <a class="btn btn-default" href="{{url_for('.deletetask_intasktrashbin', task_id=t.id)}}">Permanent Delete</a></p>
+<br>
+{% endfor %}
+
+{% import "_macrosforsearch.html" as macros %}
+{{ macros.pagination_widget(pagination, '.tasktrashbin') }}
+
+{% endblock %}

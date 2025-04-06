@@ -1,0 +1,77 @@
+{% extends "base__.html"%}
+{%import "bootstrap/wtf.html" as wtf%}
+
+
+{% block page_content %}
+
+<br><br><a class="btn btn-default" href="{{url_for('.namslife')}}">Back</a>
+<h2>{%if nextweek%}Next week{%else%}This week{%endif%}</h2><hr>
+<div align='right'>
+{{wtf.quick_form(mailform, form_type='inline')}}
+</div>
+<ul>
+<h4>Monday</h4>
+<div class="jumbotron">
+{% for t in mon_tasks%}
+<ul>
+<li>{{t.taskname}} | {% if t.info_show %}{{ t.info_show | safe }}{% else %}{{ t.info }}{% endif %} | Runtime: {{moment(t.runtime, local=True).format('LLL')}} | Endtime: {{moment(t.est_endtime, local=True).format('LLL')}} {%if t.overlapping%}[Overlapping]{%endif%}
+<span><a class="btn btn-default" href="{{url_for('.taskfullview', task_id=t.id)}}">Full view</a></span></li>
+</ul>
+{% endfor %}
+</div>
+<h4>Tuesday</h4>
+<div class="jumbotron">
+{% for t in tue_tasks%}
+<ul>
+<li>{{t.taskname}} | {% if t.info_show %}{{ t.info_show | safe }}{% else %}{{ t.info }}{% endif %} | Runtime: {{moment(t.runtime, local=True).format('LLL')}} | Endtime: {{moment(t.est_endtime, local=True).format('LLL')}} {%if t.overlapping%}[Overlapping]{%endif%}
+<span><a class="btn btn-default" href="{{url_for('.taskfullview', task_id=t.id)}}">Full view</a></span></li>
+</ul>
+{% endfor %}
+</div>
+<h4>Wednesday</h4>
+<div class="jumbotron">
+{% for t in wed_tasks%}
+<ul>
+<li>{{t.taskname}} | {% if t.info_show %}{{ t.info_show | safe }}{% else %}{{ t.info }}{% endif %} | Runtime: {{moment(t.runtime, local=True).format('LLL')}} | Endtime: {{moment(t.est_endtime, local=True).format('LLL')}} {%if t.overlapping%}[Overlapping]{%endif%}
+<span><a class="btn btn-default" href="{{url_for('.taskfullview', task_id=t.id)}}">Full view</a></span></li>
+</ul>
+{% endfor %}
+</div>
+<h4>Thursday</h4>
+<div class="jumbotron">
+{% for t in thur_tasks%}
+<ul>
+<li>{{t.taskname}} | {% if t.info_show %}{{ t.info_show | safe }}{% else %}{{ t.info }}{% endif %} | Runtime: {{moment(t.runtime, local=True).format('LLL')}} | Endtime: {{moment(t.est_endtime, local=True).format('LLL')}} {%if t.overlapping%}[Overlapping]{%endif%}
+<span><a class="btn btn-default" href="{{url_for('.taskfullview', task_id=t.id)}}">Full view</a></span></li>
+</ul>
+{% endfor %}
+</div>
+<h4>Friday</h4>
+<div class="jumbotron">
+{% for t in fri_tasks%}
+<ul>
+<li>{{t.taskname}} | {% if t.info_show %}{{ t.info_show | safe }}{% else %}{{ t.info }}{% endif %} | Runtime: {{moment(t.runtime, local=True).format('LLL')}} | Endtime: {{moment(t.est_endtime, local=True).format('LLL')}} {%if t.overlapping%}[Overlapping]{%endif%}
+<span><a class="btn btn-default" href="{{url_for('.taskfullview', task_id=t.id)}}">Full view</a></span></li>
+</ul>
+{% endfor %}
+</div>
+<h4>Saturday</h4>
+<div class="jumbotron">
+{% for t in sat_tasks%}
+<ul>
+<li>{{t.taskname}} | {% if t.info_show %}{{ t.info_show | safe }}{% else %}{{ t.info }}{% endif %} | Runtime: {{moment(t.runtime, local=True).format('LLL')}} | Endtime: {{moment(t.est_endtime, local=True).format('LLL')}} {%if t.overlapping%}[Overlapping]{%endif%}
+<span><a class="btn btn-default" href="{{url_for('.taskfullview', task_id=t.id)}}">Full view</a></span></li>
+</ul>
+{% endfor %}
+</div>
+<h4>Sunday</h4>
+<div class="jumbotron">
+{% for t in sun_tasks%}
+<ul>
+<li>{{t.taskname}} | {% if t.info_show %}{{ t.info_show | safe }}{% else %}{{ t.info }}{% endif %} | Runtime: {{moment(t.runtime, local=True).format('LLL')}} | Endtime: {{moment(t.est_endtime, local=True).format('LLL')}} {%if t.overlapping%}[Overlapping]{%endif%}
+<span><a class="btn btn-default" href="{{url_for('.taskfullview', task_id=t.id)}}">Full view</a></span></li>
+</ul>
+{% endfor %}
+</div>
+</ul>
+{% endblock %}

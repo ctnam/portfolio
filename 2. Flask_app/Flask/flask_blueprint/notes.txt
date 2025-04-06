@@ -1,0 +1,25 @@
+def has_permission(self, perm):   ######
+    return self.permissions & perm == perm
+
+
+
+
+uuu = User.query.filter(User.username.startswith('a'))   #BaseQuery object
+filter>< filter_by   u = User.query.filter_by(username="tnam")
+User.query.filter(User.username.startswith('a')).all()   #BaseQuery object + method .all() => List of User objects
+
+
+# AppenderBaseQuery Object 'posts' in Flask Shell
+print ([k.posts for k in uuu.all()]) # posts = db.Relationship
+
+# Between .first() and .all()
+print ([k.posts.first() for k in uuu.all()]) #[None, None, <Post 24>, None, None, None, <Post 100>, None, None, None, None, None, None, None, None, <Post 19>, <Post 97>, None, None, None, None]
+print ([k.posts.all() for k in uuu.all()]) #[[], [], [<Post 24>], [], [], [], [<Post 100>], [], [], [], [], [], [], [], [], [<Post 19>], [<Post 97>], [], [], [], []]
+
+# Errors due to all() is List, and first() mixed with None   ^^^
+print ([k.posts.all().body for k in uuu.all()]) #NOT WORK 'list' object has no attribute 'body'
+print ([k.posts.first().body for k in uuu.all()]) #'NoneType' object has no attribute 'body'
+
+print ([k.posts.first().body for k in uuu.all() if k.posts.first() != None])
+print ([k.posts.first().author for k in uuu.all() if k.posts.first() != None])
+print ([k.posts.first().author.username for k in uuu.all() if k.posts.first() != None])

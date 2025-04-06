@@ -1,0 +1,129 @@
+{% extends "bootstrap/base.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+{% import "bootstrap/wtf2.html" as wtf2 %}
+
+
+{% block title %}Deadlines to Nam{% endblock %}
+
+{% block scripts %}
+{{ super() }}
+{{ moment.include_moment() }}
+{{ pagedown.include_pagedown() }}
+<!--{{ moment.locale('es') }}-->
+{% endblock %}
+
+
+
+
+
+{% block navbar %}
+<div class="navbar navbar-inverse" role="navigation">
+    <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle"
+             data-toggle="collapse" data-target=".navbar-collapse">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="{{url_for('main.about')}}">Flask 🤵 Blueprints</a>
+        </div>
+
+        <div class="navbar-collapse collapse">
+            <ul class="nav navbar-nav">
+                <li><a href="/">World around</a></li>
+                {% if current_user.is_authenticated %}
+                <li><a href="{{url_for('main.namslife')}}">Home</a></li>
+                {% endif %}
+            </ul>
+<!--Above is left navbar, below is right-->
+            <ul class="nav navbar-nav navbar-right">
+                {% if current_user.is_authenticated %}
+                <li><a href="{{ url_for('main.user', username=current_user.username) }}">Profile</a></li>
+                <li><a href="{{ url_for('auth.logout') }}">Log ⚙ut</a></li>
+                {% else %}
+                <li><a href="{{ url_for('auth.login') }}">Log In</a></li>
+                {% endif %}
+            </ul>
+        </div>
+
+    </div>
+</div>
+{% endblock %}
+
+
+
+{% block content %}
+<div class="container" id="mainview">
+    {% for message in get_flashed_messages() %}
+    <div class="alert alert-success">
+        <button type="button" class="close" data-dismiss="alert">x</button>
+        {{ message }}
+    </div>
+    {% endfor %}
+
+
+
+
+    {% block page_content %}
+
+
+    <h2>‍Hello Nam,</h2>
+
+
+    <hr><p align="right"><a class="btn btn-success" href="{{url_for('.enterdeadlines')}}"><b>New deadline</b></a></p>
+
+
+
+<div align="center">
+{{wtf.quick_form(form, form_type="inline")}}
+</div>
+
+
+<div class="viewdeadlines">
+<br><br>
+
+
+{%if not importedtasks_mode%}
+
+<table>
+  <tr>
+    <td>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</td><td><div class="display1">
+    {%for deadline in alldeadlines%}
+    <ul>
+      &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+      ⏰ <span>{{deadline.duty}} <b>|</b> {%if deadline.todayed or deadline.overdrafted%}<b>{%endif%}{{moment(deadline.deadline_time, local=True).format('LLLL')}} ({{moment(now).toTime(deadline.deadline_time)}}){%if deadline.todayed or deadline.overdrafted%}</b>{%endif%} <b>|</b> {% if deadline.rememberinfo_show %}{{ deadline.rememberinfo_show | safe }}{% else %}{{ deadline.remember_info }}</span>{% endif %}
+       <span><a class="btn btn-default" href="{{url_for('.offdeadlines', id=deadline.id)}}">X Done</a></span>
+    </ul>
+    {%endfor%}
+    </div></td>
+    <td>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</td>
+    <td><div align="right">
+      <a {%if timerange_mode=="today"%}class="badge"{%endif%} href="{{url_for('.deadlinestoday')}}">Today</a><br>
+      <a {%if timerange_mode=="thisweek"%}class="badge"{%endif%} href="{{url_for('.deadlinesthisweek')}}">This week</a><br>
+    <a {%if timerange_mode=="twoweeks"%}class="badge"{%endif%} href="{{url_for('.deadlinesintwoweeks')}}">In two weeks</a><br>
+    <a {%if timerange_mode=="thismonth"%}class="badge"{%endif%} href="{{url_for('.deadlinesthismonth')}}">This month</a><br>
+  <a {%if timerange_mode=="allsorted"%}class="badge"{%endif%} href="{{url_for('.deadlinesallsorted')}}">Nearest</a></td></div>
+  </tr>
+</table>
+
+
+{%endif%}
+
+{%if importedtasks_mode%}
+{%for taskobject in taskobjects%}
+<ul>
+  &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+  📅 <span>{{taskobject.taskname}} <b>|</b> {{moment(taskobject.runtime, local=True).format('LLLL')}}</span>
+     <span><a class="label label-success" href="{{url_for('.setdeadlines', id=taskobject.id)}}"><b>Set deadline</b></a></span>
+</ul>
+{%endfor%}
+{%endif%}
+
+</div>
+
+
+    {% endblock %}
+</div>
+{% endblock %}

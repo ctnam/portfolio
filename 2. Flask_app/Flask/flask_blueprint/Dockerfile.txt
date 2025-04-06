@@ -1,0 +1,283 @@
+FROM python:3.6-alpine
+
+ENV FLASK_APP flaske.py
+ENV FLASK_CONFIG docker
+
+RUN adduser -D tnam
+USER tnam
+
+WORKDIR /home/flaske
+
+COPY requirements requirements
+RUN python -m venv venv
+RUN venv/bin/pip install -r requirements/docker.txt
+
+COPY app app
+COPY migrations migrations
+COPY flaske.py config.py boot.sh ./
+
+# runtime configuration
+EXPOSE 5000
+ENTRYPOINT ["./boot.sh"]
+
+
+
+*boot.sh: container startup script*
+#!/bin/sh
+source venv/bin/activate
+flask deploy
+exec gunicorn -b 0.0.0.0:5000 --access-logfile - --error-logfile - flaske:app
+
+
+<<<Choose Alpine Linux>>>
+docker build -t flaske_image:latest .
+docker images
+docker run --name flaske_container -d -p 8000:5000 \
+  -e SECRET_KEY=57d40f677aff4d8d96df97223c74d217 \
+  -e MAIL_USERNAME=webdev.tnam@gmail.com \
+  -e MAIL_PASSWORD=<your-gmail-password> flaske_image:latest
+docker ps
+
+SO NOW We can access the containerized application on port 8000 of our system, either locally as http://localhost:8000 
+										or from any other computer in the network as http://<ip-address>:8000.
+
+STOP and REMOVE container (based on container id = 71357ee776ae)
+docker stop 71357ee776ae
+docker rm 71357ee776ae
+
+INSPECT
+docker exec -it 71357ee776ae sh
+	(Open a shell session with sh (the Unix shell) without interrupting the container)
+
+DOCKER HUB share images
+docker login
+docker tag flaske_image:latest <your-dockerhub-username>/flaske_image:latest
+UPLOAD
+docker push <your-dockerhub-username>/flaske_image:latest
+docker run --name flaske -d -p 8000:5000 \
+<your-dockerhub-username>/flaske_image:latest
+
+DOCKER EXTERNAL DATABASE Container
+docker run --name mysql -d -e MYSQL_RANDOM_ROOT_PASSWORD=yes \
+  -e MYSQL_DATABASE=flaske -e MYSQL_USER=tnam \
+  -e MYSQL_PASSWORD=<database-password> \
+  mysql/mysql-server:5.7 
+To connect to a MySQL database, SQLAlchemy requires a supported MySQL client package such as pymysql to be added to docker.txt
+docker build -t flaske_image:latest .    (the container image to be rebuilt)
+docker rm -f
+docker run -d -p 8000:5000 --link mysql:dbserver \
+  -e DATABASE_URL=mysql+pymysql://flaske:<database-password>@dbserver/flaske \
+  -e MAIL_USERNAME=<your-gmail-username> -e MAIL_PASSWORD=<your-gmail-password> \
+  flaske_image:latest
+ 	The source container is mysql, the database container started earlier. 
+	This container is going to be accessible in the new Flaske container with the dbserver hostname.
+
+
+Container Orchestration
+As the number of containers that are part of the application increases, Container orchestration frameworks built on top of Docker help with this task
+*docker-compose.yml file that represents the containerized Flaske along with its MySQL service*
+
+version: '3'
+services:
+  flaske:
+    build: .
+    ports:
+      - "8000:5000"
+    env_file: .env
+    links:
+      - mysql:dbserver
+    restart: always
+  mysql:
+    image: "mysql/mysql-server:5.7"
+    env_file: .env-mysql
+    restart: always
+
+The version key ^^^ specifies which version of Compose is used, 
+and the services key ^^^ defines the containers of the application as its children. 
+In the case of Flaske, these are two services named flaske and mysql.
+	Subkeys : Arguments that are given to the docker 'build' and docker 'run' commands
+		The 'build' key specifies the build directory, where the Dockerfile is located
+		The 'links' key establishes a link to the MySQL container, by exposing it with the hostname dbserver.
+The .env file:
+FLASK_APP=flaske.py
+FLASK_CONFIG=docker
+SECRET_KEY=3128b4588e7f4305b5501025c13ceca5
+MAIL_USERNAME=<your-gmail-username>
+MAIL_PASSWORD=<your-gmail-password>
+DATABASE_URL=mysql+pymysql://flaske:<database-password>@dbserver/flaske
+In the case of mysql:
+	Subkeys: The 'image' key specifies the name and tag of the container image to use for this service
+The .env-mysql file:
+MYSQL_RANDOM_ROOT_PASSWORD=yes
+MYSQL_DATABASE=flaske
+MYSQL_USER=tnam
+MYSQL_PASSWORD=<database-password>
+
+*boot.sh: waiting for the database to be up (updated from the above)* =>  The container will be able to tolerate failures due to the database service not being immediately ready to accept requests.
+#!/bin/sh
+source venv/bin/activate
+
+while true; do
+    flask deploy
+    if [[ "$?" == "0" ]]; then
+        break
+    fi
+    echo Deploy command failed, retrying in 5 secs...
+    sleep 5
+done
+
+exec gunicorn -b :5000 --access-logfile - --error-logfile - flaske:app
+
+
+
+docker-compose up -d --build
+docker-compose logs
+docker-compose logs -f         (constantly monitor the log stream)
+docker-compose ps 		(command shows a summary of all the application containers that are running and their state)
+docker-compose up		(rebuild the application container if anything changed, and then replace the older container with a fresh one)
+docker-compose down command	//	docker-compose rm --stop --force   	(To stop the application // Remove the stopped containers)
+
+
+**Cleaning Up Old Containers and Images**
+docker ps -a   		(containers that are running, and containers that were stopped but are still in the system)
+docker rm -f <name-or-id> <name-or-id> ...
+docker rmi		(remove image)
+===============================================================
+
+
+# syntax=docker/dockerfile:1
+
+FROM python:3.8-slim-buster
+
+WORKDIR /flaskapp_image
+
+COPY requirements.txt requirements.txt
+RUN pip3 install -r requirements.txt
+
+COPY . .
+CMD [ "python3", "-m" , "flask", "run", "--host=0.0.0.0"]
+
+
+=============================
+
+docker build --tag python-docker:v1.0
+docker run python-docker
+curl localhost:5000    (NOT run)
+	press ctrl-c
+docker run --publish 5000:5000 python-docker
+	docker run -d -p 5000:5000 python-docker    (detached mode)
+docker ps    docker ps --all    (list all the containers)
+	docker stop
+	docker restart some_containername
+	docker rm some_containername    (remove)
+	docker run -d -p 5000:5000 --name rest-server python-docker    (rename)
+
+=============================
+
+docker-compose.dev.yml inside the working directory
+
+
+version: '3.8'
+
+services:
+ web:
+  build:
+   context: .
+  ports:
+  - 5000:5000
+  volumes:
+  - ./:/app
+
+ mysqldb:
+  image: mysql
+  ports:
+  - 3306:3306
+  environment:
+  - MYSQL_ROOT_PASSWORD=p@ssw0rd1
+  volumes:
+  - mysql:/var/lib/mysql
+  - mysql_config:/etc/mysql
+
+volumes:
+  mysql:
+  mysql_config:
+
+
+docker-compose -f docker-compose.dev.yml up --build
+
+
+import mysql.connector
+import json
+from flask import Flask
+
+app = Flask(__name__)
+
+@app.route('/')
+def hello_world():
+  return 'Hello, Docker!'
+
+@app.route('/widgets')
+def get_widgets() :
+  mydb = mysql.connector.connect(
+    host="mysqldb",
+    user="root",
+    password="p@ssw0rd1",
+    database="inventory"
+  )
+  cursor = mydb.cursor()
+
+
+  cursor.execute("SELECT * FROM widgets")
+
+  row_headers=[x[0] for x in cursor.description] #this will extract row headers
+
+  results = cursor.fetchall()
+  json_data=[]
+  for result in results:
+    json_data.append(dict(zip(row_headers,result)))
+
+  cursor.close()
+
+  return json.dumps(json_data)
+
+@app.route('/initdb')
+def db_init():
+  mydb = mysql.connector.connect(
+    host="mysqldb",
+    user="root",
+    password="p@ssw0rd1"
+  )
+  cursor = mydb.cursor()
+
+  cursor.execute("DROP DATABASE IF EXISTS inventory")
+  cursor.execute("CREATE DATABASE inventory")
+  cursor.close()
+
+  mydb = mysql.connector.connect(
+    host="mysqldb",
+    user="root",
+    password="p@ssw0rd1",
+    database="inventory"
+  )
+  cursor = mydb.cursor()
+
+  cursor.execute("DROP TABLE IF EXISTS widgets")
+  cursor.execute("CREATE TABLE widgets (name VARCHAR(255), description VARCHAR(255))")
+  cursor.close()
+
+  return 'init database'
+
+if __name__ == "__main__":
+  app.run(host ='0.0.0.0')
+
+=============================
+
+Before we start, ensure you can access Docker Hub from any workflows you create. To do this:
+1. Add your Docker ID as a secret to GitHub. Navigate to your GitHub repository and click Settings > Secrets > New secret.
+2. Create a new secret with the name DOCKER_HUB_USERNAME and your Docker ID as value.
+3. Create a new Personal Access Token (PAT). To create a new token, go to Docker Hub Settings and then click New Access Token.
+4. Let’s call this token simplewhaleci.
+5. Now, add this Personal Access Token (PAT) as a second secret into the GitHub secrets UI with the name DOCKER_HUB_ACCESS_TOKEN.
+
+We will have two different flows: one for our changes to master, and one for our pull requests.
+https://docs.docker.com/language/python/configure-ci-cd/

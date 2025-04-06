@@ -1,0 +1,23 @@
+{% extends "base__.html"%}
+
+
+{% block page_content %}
+
+<br><br><p><a href="/namslife/cleanoutdatedtasks">Clean all already-run tasks</a></p>
+<h2>⌚ {{numberof_outdatedtasks}} outdated task(s)</h2><hr>
+{% for t in outdatedtasks%}
+<p><span class="label label-primary">Name:</span> {{t.taskname}}</p>
+<p><span class="label label-primary">Info:</span> {% if t.info_show %}
+                                                  {{ t.info_show | safe }}
+                                                  {% else %}
+                                                  {{ t.info }}
+           {% endif %}</p>
+<p><span class="label label-primary">Runtime:</span> {{moment(t.runtime, local=True).format('LLLL')}}
+  <a class="btn btn-default" href="{{url_for('.taskfullview', task_id=t.id)}}">Full View</a> <a class="btn btn-default" href="{{url_for('.trashmovetask', task_id=t.id)}}">Move to Trash</a></p>
+<br><hr>
+{% endfor %}
+
+{% import "_macrosforsearch.html" as macros %}
+{{ macros.pagination_widget(pagination, '.tasktrashbin') }}
+
+{% endblock %}

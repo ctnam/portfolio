@@ -1,0 +1,16 @@
+.help
+.import   (CSV files)
+.read data.sql
+.quit
+========================================================================================
+sqlite> .open data.sqlite
+sqlite> .mode markdown   ("box", "markdown", "table", "insert" / "html", "json", and "tcl")
+sqlite> select * from users;
+sqlite> select * from roles;
+sqlite> .quit
+
+sqlite> .open data.sqlite
+sqlite> .mode json
+sqlite> .output data.json
+sqlite> select * from users;
+sqlite> .quit

@@ -1,0 +1,147 @@
+1. Bits are the basic element for information processing and the smallest unit of information. How can they be physically stored?
+2. If every query has two outcomes true or false how is it possible that we can answer every question using bits?
+3. I can combine 8 bits to a chunk of data how do we name that?
+4. Which decimal number does 101010 represent?
+5. How many transistors do we need for a simple boolean inverter?
+6. What is the difference between NAND and NOR?
+7. How many bits do we need to select one out of 8 elements?
+8. What outcome does the xor function have if both inputs are 1
+9. How many nanoseconds has a second
+10. The first attempt to build a computer was the Analytic Engine, who designed it?
+11. Which company named its first personal computer PC?
+12. 1980 the fourth computer generation started, what was special?
+13. Name the basic elements of a von Neumann machine
+14. What elements in a computer are connected to the bus?
+15. What is Moore’s law?
+16. Name the main elements in a CPU
+17. Describe the data path in a typical von Neumann machine
+18. How long does a cycle in modern a CPU last
+19. What is the task of the program counter PC?
+20. What is an advantage of interpreted instructions
+21. How many registers should a modern computer have?
+22. What is pipelining in a processor?
+23. What is the advantage of pipelining?
+24. What is a superscalar architecture?
+25. What is a parallel computer?
+26. How could the CPUs in a multiprocessor architecture connect the memory?
+27. What is a RAID level 4 system?
+28. Describe the basic physical process, that stores a bit in solid-state memory.
+29. Describe an LCD display.
+30. Describe a laser printer.
+31. How can a laser printer produce different shades?
+32. What is the ASCII character set?
+33. Describe the layers of a modern computer
+34. Operating systems turn ugly hardware into beautiful abstractions, what's that?
+35. The OS controls and allocates the resources, which resources?
+36. What is a multiprogramming system?
+37. Which part of the OS controls the monitor?
+38. Describe the memory hierarchy in a modern computer
+39. Name some caching issues that can appear?
+40. Name some animals in the OS Zoo.
+41. What is the process in an OS?
+42. What logical structure has a file system today?
+43. What is mounting for?
+44. Unix knows the pipe to connect two processes, what does that mean?
+45. What is the client-server model?
+46. Why do we use virtual machines?
+47. What do we need for a large C project to compile?
+48. Talk about ‘‘Programs expand to fill the memory available to hold them.’’
+49. What design has no memory abstraction?
+50. What is swapping?
+51. Name some memory management algorithms.
+52. What is virtual memory?
+53. Why speeding up paging?
+54. What means first in, first out as used in paging?
+55. What are the three security goals for data
+56. What are the three security threats for data
+57. Why do we not have secure computer systems?
+58. Describe the protective matrix for files
+59. Where do we use access control lists
+60. Give some examples of generic rights in a computer system
+61. What is the Bell-LaPadula model?
+62. How does steganography work?
+63. What is the difference between plaintext and ciphertext?
+64. How works a digital signature with a hash code?
+65. Tell the three basic ways in the authentication of a user which are possible
+66. Give an example of how challenge-response authentication works
+67. What is a typical physical object fore authentication when you want to enter your house?
+68. What is the core idea of a buffer overflow attack?
+69. What is social hacking?
+70. Where do you place a firewall in a computer network?
+71. How can a virus scanner detect a computer virus?
+72. What is code signing?
+73. Browsers use sandboxes for security, where does the program run?
+74. Is there a difference between TLS and SSL?
+75. Alice and Bob communicate over an insecure network, how can they implement privacy?
+76. What is the public key?
+77. What is the private key?
+78. Why do we need the hash in SSL?
+79. Who delivers the session key in TSL?
+80. Name the elements of a general network structure?
+81. What is a fully meshed network?
+82. What is the idea of a layer model for computer networks?
+83. Electromagnetic waves are used for communication, what are typical wavelengths?
+84. Name three types of copper cables.
+85. What is a single-mode fiber?
+86. Data transmission systems are based on data stations what are their sub-elements?
+87. Which data transmission medium do humans use when they speak?
+88. What is a value discrete and time-discrete signal?
+89. What is the parity bit in ASCII used for?
+90. What do we need for a code if we want error correction?
+91. How many bits is the size of an IP4.0 and an IP6.0 network address?
+92. Name some well-known ports.
+93. How does the TCP start a connection from the client to the server?
+94. What was the big invention of Tim Berners-Lee?
+95. Can you name a precursor of the WWW?
+96. Describe the basic steps when a Browser connects a web server.
+97. Do you know error 404?
+98. Where do we need POP3 and IMAP?
+99. What is the usage domain of FTP?
+100. Where is the cloud in cloud computing?
+101. Which HTTP statement is most often used?
+102. Describe all possible parts of an URL.
+103. For which purpose are URL extensions often used?
+104. Why is the software of a browser so complex?
+105. What is MIME?
+106. What MIME type has a web page?
+107. Is there a way to connect a database with the internet?
+108. Why do we have cookies in the HTTP world?
+109. Who recommends XML?
+110. What are the different goals between XML and HTML?
+111. On what data structure does XML rely on?
+112. What relation describe parent, child, and siblings in the tree structure of XML?
+113. What is the prolog in XML?
+114. What is a well-formed XML document
+115. Is there a shortener for an empty element in XML?
+116. Names in XML cannot contain some elements, which?
+117. What is best name practice?
+118. What is Camel case?
+119. Why are attributes often not a good solution in XML?
+120. What can we do if we have name conflicts in XML?
+121. The XML document is parsed to what structure in the software?
+122. What is the application of XSLT?
+123. What is the difference between DTD and Schema?
+124. How many days have different Quarters of a year?
+125. Was the year 2000 a leap year, why?
+126. You live in Germany and want to call someone in California, when is a good time?
+127. When started UNIX time?
+128. What is a ledger?
+129. Name the key challenges for digital money transfer.
+130. Do we know who invented Bitcoin?
+131. How are the chain element in a blockchain connected?
+132. Name a disadvantage of Bitcoin
+133. What is the relation between hash code and Bitcoin mining?
+134. Can someone lose a bitcoin, how?
+135. Bitcoin has a hidden centrality how that?
+136. Name the key elements of a biological neural network.
+137. Give a rough estimation of the number of neurons in the human brain.
+138. What is an artificial neuron?
+139. What is the basic mathematical operation in a feed-forward ANN?
+140. Describe backpropagation in simple words.
+141. What are the main steps in a learning algorithm?
+142. When was Google founded?
+143. Define a perfect search engine.
+144. What describes the link matrix in the page rank algorithm?
+145. Give a rough number, how many books Google has scanned.
+146. What is the main income stream for the company Google?
+147. What is intelligence?
