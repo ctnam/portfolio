@@ -1,37 +1,61 @@
-# 👋 Welcome – I'm Nam Cao
+# Coding Portfolio – Tung Nam Cao
 
-## 💻 Developer & Data Enthusiast
-
-I enjoy working on small-scale, meaningful tech projects — from data pipelines and web apps to regression analysis and reporting automation. Most of my work blends real-world motivation with clean logic and thoughtful design.
-
-**Languages & Tools**: Python, Java (Spring Boot), Flask, SQL, Git, Power BI, BPMN, RPA, ETL  
-**Focus**: Data workflows, lightweight automation, real-world usability
-
-🔗 Portfolio Modules:
-- 📊 Exam ETL Script (Python)
-- 📦 Inventory Flask WebApp
-- 🔐 Secure Java SE Messaging
-- 📚 Scholar Data Analytics
-- 🧠 Grade Prediction via Regression
-
-> I'm calm, precise, and always learning – open to work where practical coding meets impact.
+🧠 **Calm. Precise. Curious.**  
+📌 Developer in Python, Java, SQL – modular, data-focused, with real-world curiosity.
 
 ---
 
-## 👨‍💻 Über mich (Deutsch)
+## 🧰 Module Overview (English)
 
-Ich bin Wirtschaftsinformatiker mit Fokus auf Datenprozesse, Automatisierung und Softwareentwicklung. Meine Projekte entstehen oft aus realem Bedarf und sind bewusst leichtgewichtig, modular und dokumentiert.  
+### ✅ Module 1 – Python Script: Exam ETL Trainer
+- Extract/transform/load question bank
+- Random pop-up quiz function (terminal)
+- Local `.txt` storage
 
-**Sprachen & Tools**: Python, Java, SQL, Flask, Spring Boot, Power BI, RPA  
-**Themenfelder**: Webanwendungen, Datenanalyse, Prozessautomatisierung, ETL
+### ✅ Module 2 – Flask App: Inventory Tracker
+- Web forms with scheduling
+- Quantity alerts + Bootstrap styling
+- SQLite DB, filterable views
 
-> Ich arbeite strukturiert, lösungsorientiert und mit Blick fürs Wesentliche.
+### ✅ Module 3 – Java SE: Best Practices Engine
+- Pure Java structure, concurrency patterns
+- Favorite syntaxes & inner architecture
+- Message simulation with multi-threading
+
+### ✅ Module 4 – Python Script: Scholar Data Pipeline
+- Google Scholar article extraction
+- ETL, CSV storage, optional ML model
+- Web scraping and topic statistics
+
+### 🟧 Module 5 – Spring Boot Web App (Broken)
+- MySQL integration + RDS (attempted)
+- Deployment via Beanstalk failed
+- Valuable Spring Boot learning experience
+
+### ✅ Module 6 – Grade Conversion & Prediction
+- Regression-based grade estimator
+- Conversion via chart + trendline
+- Linear model using `sklearn`
 
 ---
 
-📬 **Kontakt**: namt.cao@outlook.de
-🔗 LinkedIn-Profil: https://www.linkedin.com/in/tungnam-cao/ 
+## 📁 Dokumentation
+- `modules_infos.txt` – Description & update log
+- `.txt` and `.csv` datasets included
+- Contact: [namt.cao@outlook.de](mailto:namt.cao@outlook.de)
 
 ---
 
-*Crafted with reflection & clarity – Reflected by ChatGPT* 🤖
+## 🗂️ Portfolio – Deutsch (Kurzfassung)
+
+Dies ist ein persönliches Entwicklerportfolio mit Fokus auf:
+- ETL-Prozesse
+- Web-Anwendungen (Flask, Spring Boot)
+- Datenmodellierung & Visualisierung
+- Regressionsanalyse und Skriptentwicklung
+
+🎯 Ziel: Einblicke in meine technische Entwicklung, Lernprozesse & Motivation durch reale Anwendungsfälle.
+
+---
+
+> Reflektiert & aufbereitet mit Unterstützung von ChatGPT.
