@@ -3,6 +3,10 @@
 🧠 **Calm. Precise. Curious.**  
 📌 Developer in Python, Java, SQL – modular, data-focused, with real-world curiosity.
 
+I am a motivated developer with a passion for efficient, real-world coding. I work with Python, Java, and data-driven tools to create streamlined, modular systems.
+I enjoy getting to know and sharing through real applications – visible in my portfolio modules.
+I believe in calm precision & structured growth, and I’m open to roles in Germany and worldwide, especially where my work creates value where it's needed.
+
 ---
 
 ## 🧰 Module Overview (English)
